@@ -1,4 +1,6 @@
-﻿namespace FutPosCalc;
+﻿using System.Text;
+
+namespace FutPosCalc;
 
 public class FormInputRaw
 {
@@ -17,4 +19,5 @@ public class FormInput
     public decimal TradeAmount = 0m;
     public decimal TakeProfitAt = 0m;
     public bool HasTakeProfitAt = false;
+    public bool HasLiquidation = false;
 }

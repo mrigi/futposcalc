@@ -26,7 +26,7 @@
         <Label Content="Take Profit At" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="35,161,0,0" VerticalAlignment="Top"/>
         <TextBox Name="ctTakeProfitAt" KeyUp="Input_KeyUp" Text="" HorizontalAlignment="Left" Padding="0,0,0,0" Margin="126,163,0,0" TextAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Width="82" Height="22" Grid.ColumnSpan="2"/>
 
-        <Label Name="ctSide" Content="Short" Visibility="Visible" TextBlock.Foreground="Red" HorizontalAlignment="Left" Margin="213,42,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Label Name="ctSide" Content="Short" Visibility="Visible" TextBlock.Foreground="Red" HorizontalAlignment="Left" Margin="213,55,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
 
         <Separator HorizontalAlignment="Center" Height="14" Margin="0,207,0,0" VerticalAlignment="Top" Width="232" Grid.Column="1"/>
 

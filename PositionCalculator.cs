@@ -1,13 +1,5 @@
 ﻿namespace FutPosCalc;
 
-public class FuturesPosition
-{
-    public decimal PositionSize { get; set; }
-    public decimal AdditionalMargin { get; set; }
-    public decimal Volatility { get; set; }
-    public decimal HalfLossPrice { get; set; }
-    public decimal EstimatedProfit { get; set; }
-}
 
 public class FuturesPositionCalculator
 {
@@ -35,8 +27,23 @@ public class FuturesPositionCalculator
         decimal profit = 0m;
         decimal exitFeeCost;
 
-        var isLong = takeProfitAt > entryPrice;
-        var tradeType = isLong ? "Long" : "Short";
+
+        bool isLong = false;
+
+
+        if (input.HasLiquidation)
+        {
+            isLong = input.LiquidationPrice < entryPrice;
+        }
+
+        else if (input.HasTakeProfitAt)
+        {
+            isLong = input.TakeProfitAt > entryPrice;
+
+            liquidationPriceAt = entryPrice * (1 + 1/leverage);
+        }
+
+            var tradeType = isLong ? "Long" : "Short";
         var diff = 0m;
 
         do
@@ -103,6 +110,8 @@ public class FuturesPositionCalculator
             EstimatedProfit = profit,
             Volatility = liquidationPercentage,
             HalfLossPrice = halfLossAt,
+            LossPrice = liquidationPrice,
+            IsLong = isLong,
         };
 
         return result;

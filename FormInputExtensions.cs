@@ -2,7 +2,11 @@
 
 public static class FormInputExtensions
 {
-    private static (bool, string) ValidateDecimal(string decimalStr, ref decimal value, string name, bool enabled = true)
+    private static (bool, string) ValidateDecimal(
+        string decimalStr,
+        ref decimal value,
+        string name,
+        bool enabled = true)
     {
         if (!enabled)
         {
@@ -36,10 +40,11 @@ public static class FormInputExtensions
         var resultType = result.GetType();
 
         result.HasTakeProfitAt = !string.IsNullOrEmpty(input.TakeProfitAt);
+        result.HasLiquidation = !string.IsNullOrEmpty(input.LiquidationPrice);
 
         foreach (var (b, e) in new[]{
-                ValidateDecimal(input.LiquidationPrice, ref result.LiquidationPrice, "Liquidation Price"),
                 ValidateDecimal(input.EntryPrice, ref result.EntryPrice, "Entry Price"),
+                ValidateDecimal(input.LiquidationPrice, ref result.LiquidationPrice, "Liquidation Price", result.HasLiquidation),
                 ValidateDecimal(input.Leverage, ref result.Leverage, "Leverage"),
                 ValidateDecimal(input.TradeAmount, ref result.TradeAmount, "Trade Amount"),
                 ValidateDecimal(input.TakeProfitAt!, ref result.TakeProfitAt, "Take Profit", result.HasTakeProfitAt),
@@ -48,6 +53,23 @@ public static class FormInputExtensions
             if (!b)
             {
                 return (b, e, result);
+            }
+        }
+
+        if (!result.HasTakeProfitAt & !result.HasLiquidation)
+        {
+            return (false, "Either 'Liquidation' or 'Take profit' must be filled", result);
+        }
+
+        if (result.HasTakeProfitAt & result.HasLiquidation)
+        {
+            if (
+                ((result.TakeProfitAt > result.EntryPrice) & (result.LiquidationPrice > result.EntryPrice))
+                |
+                ((result.TakeProfitAt < result.EntryPrice) & (result.LiquidationPrice < result.EntryPrice))
+            )
+            {
+                return (false, "'Take Profit' contradicts 'Liquidation'", result);
             }
         }
 

@@ -35,32 +35,22 @@ public partial class MainWindow : Window
 
     private void RenderResult(FuturesPosition position, FormInput input)
     {
-        var sb = new StringBuilder();
+        ctOutput.Text = position.ToString(input);
 
-        var padLeft = 19;
-        var padRight = 10;
+        ctSide.Visibility = Visibility.Visible;
 
-        sb.Append("Position Size:".PadLeft(padLeft));
-        sb.AppendLine($"{position.PositionSize:F2}".PadLeft(padRight));
-
-        sb.Append("Additional Margin:".PadLeft(padLeft));
-        sb.AppendLine($"{position.AdditionalMargin:F2}".PadLeft(padRight));
-
-        if (input.HasTakeProfitAt)
+        if (position.IsLong)
         {
-            sb.Append("Estimated Profit:".PadLeft(padLeft));
-            sb.AppendLine($"{position.EstimatedProfit:F2}".PadLeft(padRight));
+            ctSide.Content = "Long";
+            ctSide.Foreground = new SolidColorBrush(Colors.Green);
+
+        }
+        else
+        {
+            ctSide.Content = "Short";
+            ctSide.Foreground = new SolidColorBrush(Colors.Red);
         }
 
-        sb.AppendLine();
-        
-        sb.Append("Volatility Allowed:".PadLeft(padLeft));
-        sb.AppendLine($"{position.Volatility:F2}%".PadLeft(padRight));
-
-        sb.Append("Half Loss At:".PadLeft(padLeft));
-        sb.AppendLine($"{position.HalfLossPrice:F2}".PadLeft(padRight));
-
-        ctOutput.Text = sb.ToString();
     }
 
     private void UpdateSide()
@@ -99,7 +89,8 @@ public partial class MainWindow : Window
 
     private void ProcessInput()
     {
-        UpdateSide();
+        ctSide.Visibility = Visibility.Hidden;
+        //UpdateSide();
 
         var input = new FormInputRaw
         {
