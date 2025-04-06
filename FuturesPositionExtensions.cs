@@ -34,7 +34,15 @@ static class FuturesPositionExtensions
         //sb.Append("Half Loss At:".PadLeft(padLeft));
         //sb.AppendLine($"{position.HalfLossPrice:F2}".PadLeft(padRight));
 
-        if (!input.HasLiquidation | (input.HasLiquidation & Math.Abs((input.LiquidationPrice - position.LossPrice)/ position.LossPrice) > 0.001m))
+        var priceDiffPct = 0m;
+
+        try
+        {
+            priceDiffPct = Math.Abs((input.LiquidationPrice - position.LossPrice) / position.LossPrice);
+        }
+        catch {}
+
+        if (!input.HasLiquidation | priceDiffPct > 0.001m)
         {
             sb.Append("Liquidation At:".PadLeft(padLeft));
             sb.AppendLine($"{position.LossPrice:F2}".PadLeft(padRight));
