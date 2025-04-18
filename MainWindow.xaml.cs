@@ -1,5 +1,4 @@
-﻿using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 
 namespace FutPosCalc;
@@ -53,44 +52,9 @@ public partial class MainWindow : Window
 
     }
 
-    private void UpdateSide()
-    {
-        decimal liquidationPrice;
-        decimal entryPrice;
-        if (
-            decimal.TryParse(ctLiquidationPrice.Text.Trim(), out liquidationPrice)
-            &&
-            decimal.TryParse(ctEntryPrice.Text.Trim(), out entryPrice)
-            &&
-            liquidationPrice > 0
-            &&
-            entryPrice > 0
-            && liquidationPrice != entryPrice
-        )
-        {
-            ctSide.Visibility = Visibility.Visible;
-            if (liquidationPrice < entryPrice)
-            {
-                ctSide.Content = "Long";
-                ctSide.Foreground = new SolidColorBrush(Colors.Green);
-
-            }
-            else
-            {
-                ctSide.Content = "Short";
-                ctSide.Foreground = new SolidColorBrush(Colors.Red);
-            }
-        }
-        else
-        {
-            ctSide.Visibility = Visibility.Hidden;
-        }
-    }
-
     private void ProcessInput()
     {
         ctSide.Visibility = Visibility.Hidden;
-        //UpdateSide();
 
         var input = new FormInputRaw
         {

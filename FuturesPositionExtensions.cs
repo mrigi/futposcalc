@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 
 namespace FutPosCalc;
 
@@ -28,11 +29,6 @@ static class FuturesPositionExtensions
 
         sb.AppendLine();
 
-        sb.Append("Volatility Allowed:".PadLeft(padLeft));
-        sb.AppendLine($"{position.Volatility:F2}%".PadLeft(padRight));
-
-        //sb.Append("Half Loss At:".PadLeft(padLeft));
-        //sb.AppendLine($"{position.HalfLossPrice:F2}".PadLeft(padRight));
 
         var priceDiffPct = 0m;
 
@@ -40,13 +36,26 @@ static class FuturesPositionExtensions
         {
             priceDiffPct = Math.Abs((input.LiquidationPrice - position.LossPrice) / position.LossPrice);
         }
-        catch {}
+        catch
+        {
+            Debug.WriteLine($"LossPrice={position.LossPrice}");
+        }
 
         if (!input.HasLiquidation | priceDiffPct > 0.001m)
         {
             sb.Append("Liquidation At:".PadLeft(padLeft));
             sb.AppendLine($"{position.LossPrice:F2}".PadLeft(padRight));
         }
+
+        sb.Append("Reclaim body price:".PadLeft(padLeft));
+        sb.AppendLine($"{position.PositionSizePrice:F2}".PadLeft(padRight));
+
+        sb.AppendLine();
+
+        sb.Append("Volatility Allowed:".PadLeft(padLeft));
+        sb.AppendLine($"{position.Volatility:F2}%".PadLeft(padRight));
+        //sb.Append("Half Loss At:".PadLeft(padLeft));
+        //sb.AppendLine($"{position.HalfLossPrice:F2}".PadLeft(padRight));
 
         return sb.ToString();
     }

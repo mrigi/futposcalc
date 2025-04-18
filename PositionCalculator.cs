@@ -26,7 +26,7 @@ public class FuturesPositionCalculator
         decimal liquidationPercentage;
         decimal profit = 0m;
         decimal exitFeeCost;
-
+        decimal positionSizePrice = 0m;
 
         bool isLong = false;
 
@@ -43,7 +43,7 @@ public class FuturesPositionCalculator
             liquidationPriceAt = entryPrice * (1 + 1/leverage);
         }
 
-            var tradeType = isLong ? "Long" : "Short";
+        var tradeType = isLong ? "Long" : "Short";
         var diff = 0m;
 
         do
@@ -81,28 +81,16 @@ public class FuturesPositionCalculator
                 profit -= exitFeeCost;
             }
 
-            diff += 0.01m;
+            diff += 0.001m;
         }
         while (
             (diff < tradeAmount)
             &&
             (isLong ? (liquidationPrice > liquidationPriceAt) : (liquidationPrice < liquidationPriceAt))
         );
-/*
-        Console.WriteLine($"Entry Price: {entryPrice}");
-        Console.WriteLine($"Liquidation Price: {liquidationPriceAt:F2}");
-        Console.WriteLine($"Leverage: {leverage}");
-        Console.WriteLine($"Amount: {tradeAmount}");
-        Console.WriteLine($"Take Profit At: {takeProfitAt}");
-        // Console.WriteLine($"Trade Type: {tradeType}");
-        Console.WriteLine($"Position: {positionCost:F2} + {additionalMargin:F2} (additional margin)");
-        //Console.WriteLine($"Liquidation Price Calculated: {liquidationPrice:F2}");
-        Console.WriteLine($"Half Loss Price: {halfLossAt:F2}");
-        Console.WriteLine($"Volatility Allowed: {liquidationPercentage:F2}%");
-        //Console.WriteLine($"Enter Fee: {enterFeeCost:F2}");
-        //Console.WriteLine($"Exit Fee: {exitFeeCost:F2}");
-        Console.WriteLine($"Profit at Take Profit: {profit:F2}");
-*/
+
+        positionSizePrice = entryPrice * (1 + ((isLong ? 1 : -1) / leverage));
+
         var result = new FuturesPosition
         {
             PositionSize = positionCost,
@@ -111,6 +99,7 @@ public class FuturesPositionCalculator
             Volatility = liquidationPercentage,
             HalfLossPrice = halfLossAt,
             LossPrice = liquidationPrice,
+            PositionSizePrice = positionSizePrice,
             IsLong = isLong,
         };
 
