@@ -13,7 +13,7 @@ public static class FormInputExtensions
             return (true, String.Empty);
         }
 
-        decimalStr = decimalStr.Trim();
+        decimalStr = decimalStr.Trim().Replace(",", "").Replace(" ", "").Replace("_", "");
 
         if (string.IsNullOrEmpty(decimalStr))
         {
