@@ -15,17 +15,17 @@ public class FuturesPositionCalculator
         decimal enterFee = 0.00m;
         decimal exitFee = 0.00m;
 
-        decimal positionCost;
-        decimal additionalMargin;
-        decimal totalMargin;
-        decimal positionLeveraged;
-        decimal enterFeeCost;
-        decimal costLeveraged;
-        decimal liquidationPrice;
-        decimal halfLossAt;
-        decimal liquidationPercentage;
+        decimal positionCost = 0m;
+        decimal additionalMargin = 0m;
+        decimal totalMargin = 0m;
+        decimal positionLeveraged = 0m;
+        decimal enterFeeCost = 0m;
+        decimal costLeveraged = 0m;
+        decimal liquidationPrice = 0m;
+        decimal halfLossAt = 0m;
+        decimal liquidationPercentage = 0m;
         decimal profit = 0m;
-        decimal exitFeeCost;
+        decimal exitFeeCost = 0m;
         decimal positionSizePrice = 0m;
 
         bool isLong = false;
@@ -45,7 +45,8 @@ public class FuturesPositionCalculator
 
         var tradeType = isLong ? "Long" : "Short";
         var diff = 0m;
-
+        var deltas = new[] { 100m, 10m, 1m, 0.001m };
+        
         do
         {
             positionCost = tradeAmount - diff;
@@ -81,7 +82,7 @@ public class FuturesPositionCalculator
                 profit -= exitFeeCost;
             }
 
-            diff += 0.001m;
+            diff += Math.Max(0.001m, tradeAmount / 100_000);
         }
         while (
             (diff < tradeAmount)
