@@ -1,4 +1,6 @@
-﻿namespace FutPosCalc;
+﻿using System.Diagnostics;
+
+namespace FutPosCalc;
 
 
 public class FuturesPositionCalculator
@@ -45,7 +47,7 @@ public class FuturesPositionCalculator
 
         var tradeType = isLong ? "Long" : "Short";
         var diff = 0m;
-        var deltas = new[] { 100m, 10m, 1m, 0.001m };
+        var deltas = new[] { 100m, 10m, 1m, 0.001m};
         
         do
         {
@@ -82,7 +84,7 @@ public class FuturesPositionCalculator
                 profit -= exitFeeCost;
             }
 
-            diff += Math.Max(0.001m, tradeAmount / 100_000);
+            diff += Math.Max(deltas.Min(), tradeAmount / 100_000);
         }
         while (
             (diff < tradeAmount)
