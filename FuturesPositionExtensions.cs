@@ -9,8 +9,8 @@ static class FuturesPositionExtensions
     {
         int decimals = 2;
 
-        var t = number;
-        while (t < 1)
+        var t = Math.Abs(number);
+        while (t < 1 && t != 0m)
         {
             t *= 10;
             decimals += 1;
@@ -25,16 +25,6 @@ static class FuturesPositionExtensions
 
         var padLeft = 19;
         var padRight = 13;
-
-        int priceDecimals = 2;
-
-        var t = position.LossPrice;
-        while (t < 1)
-        {
-            t *= 10;
-            priceDecimals += 1;
-        }
-
 
         sb.Append("Position Size:".PadLeft(padLeft));
         sb.AppendLine(FormatNumber(position.PositionSize).PadLeft(padRight));
